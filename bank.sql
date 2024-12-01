@@ -335,3 +335,16 @@ REFERENCES `customer` (
 	`customer_id`
 );
 
+# 단하님 추가
+ALTER TABLE account
+ADD COLUMN balance BIGINT NOT NULL DEFAULT 0;
+RENAME TABLE Untitled2 TO loan_goods;
+ALTER TABLE loan_goods
+ADD COLUMN product_name VARCHAR(100) NOT NULL AFTER loan_type_id, -- 대출 상품 이름
+ADD COLUMN min_vip_rating TINYINT NOT NULL DEFAULT 1 AFTER product_name, -- 최소 VIP 등급
+ADD COLUMN min_credit_rating TINYINT NOT NULL DEFAULT 1 AFTER min_vip_rating; -- 최소 신용 등급
+ALTER TABLE loan_goods
+DROP COLUMN Field;
+ALTER TABLE loan_goods
+ADD COLUMN interest_rate SMALLINT NOT NULL DEFAULT 0 AFTER min_credit_rating;
+
