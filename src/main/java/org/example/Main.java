@@ -24,8 +24,9 @@ public class Main {
         user = authInfo.getUsername();
         password = authInfo.getPassword();
 
-        //EmployeeManager & CustomerManager로 db 연결정보 전달
+        //직원관리, 자산관리, 고객모드로 db 연결정보 전달
         EmployeeManager.initDatabase(url, user, password);
+        AssetsManager.initDatabase(url, user, password);
         CustomerMode.initDatabase(url, user, password);
 
         while (true) {

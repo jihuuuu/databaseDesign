@@ -184,14 +184,14 @@ public class EmployeeManager {
             connection.setAutoCommit(false);
             try{
 
-                // 첫 번째 SQL 실행
+                // 첫 번째 SQL 실행 - manager table에서 해당 직원 is_deleted = 1
                 String sqlUpdate = "UPDATE manager SET is_deleted = 1 WHERE employee_id = ?";
                 try (PreparedStatement pstmtUpdate = connection.prepareStatement(sqlUpdate)) {
                     pstmtUpdate.setLong(1, id);
                     pstmtUpdate.executeUpdate();
                 }
 
-                // 두 번째 SQL 실행
+                // 두 번째 SQL 실행 - manager_details table에서 해당 직원정보 삭제
                 String sqlDelete = "DELETE FROM manager_details WHERE manager_details_id = ?";
                 try (PreparedStatement pstmtDelete = connection.prepareStatement(sqlDelete)) {
                     pstmtDelete.setLong(1, id);
@@ -205,8 +205,7 @@ public class EmployeeManager {
                 //transaction
                 connection.commit();
             }catch (SQLException e) {
-                // 오류 발생 시 롤백
-                connection.rollback();
+                connection.rollback();  // 오류 발생 시 롤백
                 System.err.println("오류 발생으로 트랜잭션 롤백: " + e.getMessage());
             }
         } catch (Exception e) {
@@ -214,7 +213,7 @@ public class EmployeeManager {
         }
     }
 
-    // 날짜 문자열을 Timestamp로 변환
+    // 날짜 문자열을 Timestamp로 변환 - 입사일 입력시 사용
     public static Timestamp convertStringToTimestamp(String dateTime, String format) {
         if (dateTime == null) return null;
 
