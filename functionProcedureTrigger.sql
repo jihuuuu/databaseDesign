@@ -18,7 +18,7 @@ BEGIN
     -- 최근 20일 내 계좌가 존재하면 에러 발생
     IF recent_account_count > 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = '최근 20일 내에 계좌를 개설한 이력이 있습니다. 새 계좌를 개설할 수 없습니다.';
+        SET MESSAGE_TEXT = 'You have opened an account within the last 20 days. You cannot open a new account.';
     END IF;
 END;
 //
@@ -44,7 +44,8 @@ BEGIN
     -- 출금 금액이 잔액보다 많은 경우 에러 발생
     IF NEW.amount > current_balance THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = '출금 금액이 현재 계좌 잔액보다 많습니다. 출금할 수 없습니다.';
+        SET MESSAGE_TEXT = 'The withdrawal amount is more than your current account balance. You cannot withdraw money.
+';
     END IF;
 END;
 //
@@ -76,7 +77,8 @@ BEGIN
     -- 요청 금액이 최대 대출 가능 금액을 초과하는 경우
     IF NEW.amount > max_loan_amount THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = '대출 금액이 신용 등급에 따른 최대 대출 가능 금액을 초과했습니다.';
+        SET MESSAGE_TEXT = 'The loan amount exceeds the maximum loan amount based on your credit rating.
+';
     END IF;
 END;
 //
@@ -197,8 +199,8 @@ BEGIN
 
     -- 결과 반환 (문자열 형태)
     RETURN CONCAT(
-        '매달 상환금: ', FORMAT(monthly_payment, 2), '원, ',
-        '남은 월 수: ', months_remaining, '개월'
+        'monthly repayment: ', FORMAT(monthly_payment, 2), 'won, ',
+        'Number of months remaining: ', months_remaining, 'months'
     );
 END;
 //
